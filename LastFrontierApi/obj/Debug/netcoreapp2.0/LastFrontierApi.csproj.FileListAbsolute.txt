@@ -1,0 +1,11 @@
+c:\users\madison\source\repos\LastFrontierApi\LastFrontierApi\bin\Debug\netcoreapp2.0\LastFrontierApi.deps.json
+c:\users\madison\source\repos\LastFrontierApi\LastFrontierApi\bin\Debug\netcoreapp2.0\LastFrontierApi.runtimeconfig.json
+c:\users\madison\source\repos\LastFrontierApi\LastFrontierApi\bin\Debug\netcoreapp2.0\LastFrontierApi.runtimeconfig.dev.json
+c:\users\madison\source\repos\LastFrontierApi\LastFrontierApi\bin\Debug\netcoreapp2.0\LastFrontierApi.dll
+c:\users\madison\source\repos\LastFrontierApi\LastFrontierApi\bin\Debug\netcoreapp2.0\LastFrontierApi.pdb
+c:\users\madison\source\repos\LastFrontierApi\LastFrontierApi\obj\Debug\netcoreapp2.0\LastFrontierApi.csprojResolveAssemblyReference.cache
+c:\users\madison\source\repos\LastFrontierApi\LastFrontierApi\obj\Debug\netcoreapp2.0\LastFrontierApi.csproj.CoreCompileInputs.cache
+c:\users\madison\source\repos\LastFrontierApi\LastFrontierApi\obj\Debug\netcoreapp2.0\LastFrontierApi.AssemblyInfoInputs.cache
+c:\users\madison\source\repos\LastFrontierApi\LastFrontierApi\obj\Debug\netcoreapp2.0\LastFrontierApi.AssemblyInfo.cs
+c:\users\madison\source\repos\LastFrontierApi\LastFrontierApi\obj\Debug\netcoreapp2.0\LastFrontierApi.dll
+c:\users\madison\source\repos\LastFrontierApi\LastFrontierApi\obj\Debug\netcoreapp2.0\LastFrontierApi.pdb
