@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LastFrontierApi.Controllers
 {
-    [Authorize(Policy = "ApiUser")]
     [Route("api/[controller]")]
     public class AccountsController : Controller
     {
@@ -16,11 +15,12 @@ namespace LastFrontierApi.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
 
-        public AccountsController(UserManager<AppUser> userManager, IMapper mapper, ApplicationDbContext appDbContext)
+        public AccountsController(UserManager<AppUser> userManager, IMapper mapper, ApplicationDbContext appDbContext, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _mapper = mapper;
             _appDbContext = appDbContext;
+
         }
 
         // POST api/accounts
@@ -34,9 +34,14 @@ namespace LastFrontierApi.Controllers
 
             var userIdentity = _mapper.Map<AppUser>(model);
 
-            var result = await _userManager.CreateAsync(userIdentity, model.Password);
+            var userResult = await _userManager.CreateAsync(userIdentity, model.Password);
 
-            if (!result.Succeeded) return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
+            if (!userResult.Succeeded) { return new BadRequestObjectResult(Errors.AddErrorsToModelState(userResult, ModelState)); }
+            else
+            {
+                await _userManager.AddToRoleAsync(userIdentity, "User");
+            }
+
 
             await _appDbContext.tblStaff.AddAsync(new Staff { IdentityId = userIdentity.Id, Location = model.Location });
             await _appDbContext.SaveChangesAsync();
