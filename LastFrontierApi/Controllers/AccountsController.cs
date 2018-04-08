@@ -2,11 +2,13 @@
 using AutoMapper;
 using LastFrontierApi.Helpers;
 using LastFrontierApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LastFrontierApi.Controllers
 {
+    [Authorize(Policy = "ApiUser")]
     [Route("api/[controller]")]
     public class AccountsController : Controller
     {
