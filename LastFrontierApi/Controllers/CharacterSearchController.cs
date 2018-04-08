@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LastFrontierApi.Controllers
 {
-    [Authorize(Policy = "ApiUser")]
+    [Authorize(Policy = "ApiUser", Roles = "Admin")]
     [Route("api/[controller]")]
     public class CharacterSearchController : Controller
     {

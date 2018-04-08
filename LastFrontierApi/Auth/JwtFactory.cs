@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -18,17 +20,29 @@ namespace LastFrontierApi.Auth
             ThrowIfInvalidOptions(_jwtOptions);
         }
 
-        public async Task<string> GenerateEncodedToken(string userName, ClaimsIdentity identity)
+        public async Task<string> GenerateEncodedToken(string userName, ClaimsIdentity identity, IList<string> roles)
         {
-            var claims = new[]
+            var claims = new List<Claim>
          {
                  new Claim(JwtRegisteredClaimNames.Sub, userName),
                  new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
                  new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
                  identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Rol),
-                 identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Id)
+                 identity.FindFirst(Helpers.Constants.Strings.JwtClaimIdentifiers.Id),
+                 
              };
+            //var roles = new List<string> {"Admin", "User"};
+            /*
+            var roles = identity.Claims
+                .Where(c => c.Type == ClaimTypes.Role)
+                .Select(c => c.Value);
+                */
+            var r = roles.Select(role => new Claim(ClaimTypes.Role, role));
+            /*
+            var roles = identity.Claims
+                .Where(c => c.Type == ClaimTypes.Role)*/
 
+            claims.AddRange(r);
             // Create the JWT security token and encode it.
             var jwt = new JwtSecurityToken(
                 issuer: _jwtOptions.Issuer,

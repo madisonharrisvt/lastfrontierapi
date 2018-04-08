@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace LastFrontierApi.Controllers
 {
-    [Authorize(Policy = "ApiUser")]
+    [Authorize(Policy = "ApiUser", Roles = "Admin")]
     [Route("api/[controller]")]
     public class CharacterDetailController : Controller
     {
