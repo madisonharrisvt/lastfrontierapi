@@ -10,5 +10,7 @@ namespace LastFrontierApi.Models
         }
 
         public DbSet<Character> tblCharacter { get; set; }
+
+        public DbSet<Skill> tblCharacterSkills { get; set; }
     }
 }

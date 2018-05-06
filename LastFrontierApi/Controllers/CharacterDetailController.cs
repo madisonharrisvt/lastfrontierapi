@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text.RegularExpressions;
 using LastFrontierApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCaching.Internal;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 
@@ -25,41 +27,33 @@ namespace LastFrontierApi.Controllers
         [HttpGet("{id}")]
         public Character GetCharacterById(Guid id)
         {
-            var query = $"SELECT * FROM tblCharacter WHERE id = @id ";
-            var nameParam = new SqlParameter("id", SqlDbType.UniqueIdentifier) { Value = id };
-
-            var character = _context.tblCharacter
-                .FromSql(query, nameParam)
-                .Select(c => new Character
-                {
-                    Name = c.Name,
-                    Id = c.Id
-                }).ToList().FirstOrDefault();
+            Character character = _context.tblCharacter.Include(s => s.Skills).FirstOrDefault(c => c.Id == id);
 
             return character;
         }
 
         [HttpPut]
-        public Character UpdateCharacterNameById([FromBody] JObject body)
+        public Character UpdateCharacterNameById([FromBody] Character character)
         {
-            var name = body["name"].ToString();
-            var id = new Guid(body["id"].ToString());
 
-            var query = $"UPDATE tblCharacter SET name = @name WHERE id = @id; SELECT * FROM tblCharacter WHERE id = @id;";
+            var characterToUpdate = _context.tblCharacter.Include(s => s.Skills).FirstOrDefault(c => c.Id == character.Id);
 
-            object[] listParams = {
-                new SqlParameter("name", SqlDbType.NVarChar) { Value = name },
-                new SqlParameter("id", SqlDbType.UniqueIdentifier) { Value = id }
-            };
-
-            var character = _context.tblCharacter
-                .FromSql(query, listParams)
-                .Select(c => new Character
+            if (characterToUpdate != null)
+            {
+                foreach (var skill in characterToUpdate.Skills)
                 {
-                    Name = c.Name,
-                    Id = c.Id
-                }).ToList().FirstOrDefault();
+                    _context.tblCharacterSkills.Remove(skill);
+                }
 
+                _context.Entry(characterToUpdate).CurrentValues.SetValues(character);
+            }
+            else
+            {
+                _context.Add(character);
+            }
+
+            _context.tblCharacterSkills.AddRange(character.Skills);
+            _context.SaveChanges();
             return character;
         }
 
