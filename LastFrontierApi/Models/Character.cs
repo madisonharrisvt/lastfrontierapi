@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LastFrontierApi.Models
 {
     public class Character
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+
         public string Name { get; set; }
         public int? AccumulatedXP { get; set; }
         public int? AvailableXP { get; set; }
@@ -24,6 +25,6 @@ namespace LastFrontierApi.Models
         public int? RightLegHealth { get; set; }
         public int? LeftLegHealth { get; set; }
 
-        public virtual ICollection<Skill> Skills { get; set; }
+        public virtual ICollection<CharacterSkill> Skills { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LastFrontierApi.Models.Metadata;
+using Microsoft.EntityFrameworkCore;
 
 namespace LastFrontierApi.Models
 {
@@ -11,6 +12,13 @@ namespace LastFrontierApi.Models
 
         public DbSet<Character> tblCharacter { get; set; }
 
-        public DbSet<Skill> tblCharacterSkills { get; set; }
+        public DbSet<CharacterSkill> tblCharacterSkills { get; set; }
+
+        public DbSet<Occupation> tblOccupation { get; set; }
+        public DbSet<SideGig> tblSideGig { get; set; }
+        public DbSet<Skill> tblSkill { get; set; }
+        public DbSet<Species> tblSpecies { get; set; }
+        public DbSet<Status> tblStatus { get; set; }
+        public DbSet<StressResponse> tblStressResponse { get; set; }
     }
 }
