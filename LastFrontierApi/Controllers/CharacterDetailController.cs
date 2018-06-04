@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text.RegularExpressions;
+﻿using System.Linq;
 using LastFrontierApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.ResponseCaching.Internal;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 
 namespace LastFrontierApi.Controllers
 {
@@ -25,18 +18,22 @@ namespace LastFrontierApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public Character GetCharacterById(Guid id)
+        public Character GetCharacterById(int id)
         {
-            Character character = _context.tblCharacter.Include(s => s.Skills).FirstOrDefault(c => c.Id == id);
+            var character = _context.tblCharacter.Include(s => s.Skills).FirstOrDefault(c => c.Id == id);
 
             return character;
         }
 
         [HttpPut]
-        public Character UpdateCharacterNameById([FromBody] Character character)
+        public Character UpdateCharacterById([FromBody] Character character)
         {
+            Character characterToUpdate = null;
 
-            var characterToUpdate = _context.tblCharacter.Include(s => s.Skills).FirstOrDefault(c => c.Id == character.Id);
+            if (character.Id != 0)
+            {
+                characterToUpdate = _context.tblCharacter.Include(s => s.Skills).FirstOrDefault(c => c.Id == character.Id);
+            }
 
             if (characterToUpdate != null)
             {
@@ -58,12 +55,12 @@ namespace LastFrontierApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteCharacterById(Guid id)
+        public IActionResult DeleteCharacterById(int id)
         {
-            var characterId = new SqlParameter("CharacterId", SqlDbType.UniqueIdentifier) { Value = id };
-            var query = $"DELETE FROM tblCharacter WHERE id = @CharacterId";
-
-            _context.Database.ExecuteSqlCommand(query, characterId);
+            var characterToDelete = new Character {Id = id};
+            _context.tblCharacter.Attach(characterToDelete);
+            _context.tblCharacter.Remove(characterToDelete);
+            _context.SaveChanges();
 
             return Ok();
         }

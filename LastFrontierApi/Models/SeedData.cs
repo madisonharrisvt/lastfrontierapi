@@ -12,14 +12,14 @@ namespace LastFrontierApi.Models
             using (var context = new LfContext(
                 serviceProvider.GetRequiredService<DbContextOptions<LfContext>>()))
             {
-                if (context.tblCharacter.Any())
-                {
-                    return;
-                }
-                else
-                {
-                    throw new Exception();
-                }
+                //if (context.tblCharacter.Any())
+                //{
+                //    return;
+                //}
+                //else
+                //{
+                //    throw new Exception();
+                //}
             }
         }
     }
