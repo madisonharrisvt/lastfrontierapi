@@ -49,7 +49,7 @@ namespace LastFrontierApi.Controllers
 
             await _userManager.AddToRoleAsync(userIdentity, "User");
 
-            await _appDbContext.tblStaff.AddAsync(new Staff { IdentityId = userIdentity.Id, Location = model.Location });
+            await _appDbContext.tblStaff.AddAsync(new Staff { IdentityId = userIdentity.Id});
             await _appDbContext.SaveChangesAsync();
 
             return new OkObjectResult("Account created");

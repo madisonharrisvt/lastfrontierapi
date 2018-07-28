@@ -11,5 +11,6 @@ namespace LastFrontierApi.Models
         }
 
         public DbSet<Staff> tblStaff { get; set; }
+        public DbSet<Player> tblPlayer { get; set; }
     }
 }

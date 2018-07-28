@@ -34,6 +34,38 @@ namespace LastFrontierApi.Controllers
             return Ok(user);
         }
 
+        ////[HttpPost]
+        ////public async Task<IActionResult> UpdateOrCreateUser([FromBody]Registration model)
+        ////{
+        ////    if (!ModelState.IsValid)
+        ////    {
+        ////        return BadRequest(ModelState);
+        ////    }
+
+        ////    var userIdentity = _mapper.Map<AppUser>(model);
+
+        ////    var user = await _userManager.FindByEmailAsync(model.Email);
+
+        ////    if (user != null)
+        ////    {
+        ////        //var userResult = await _userManager.CreateAsync(userIdentity, model.Password);
+
+        ////        //if (!userResult.Succeeded) { return new BadRequestObjectResult(Errors.AddErrorsToModelState(userResult, ModelState)); }
+
+        ////        //await _userManager.AddToRoleAsync(userIdentity, "User");
+
+        ////        //await _appDbContext.tblPlayer.AddAsync(new Player { IdentityId = userIdentity.Id });
+        ////        //await _appDbContext.SaveChangesAsync();
+
+        ////        //return new OkObjectResult("Account created");
+
+                
+        ////    }
+
+            
+
+        }
+
         //[HttpGet]
         //public IActionResult Get(string userId)
         //{
