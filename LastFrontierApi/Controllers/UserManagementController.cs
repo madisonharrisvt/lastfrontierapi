@@ -60,9 +60,11 @@ namespace LastFrontierApi.Controllers
             await _appDbContext.tblPlayer.AddAsync(new Player { IdentityId = userIdentity.Id });
             await _appDbContext.SaveChangesAsync();
 
-            var newlyCreatedPlayer = _appDbContext.tblPlayer.FirstOrDefault(p => p.Identity == userIdentity);
+            //var newlyCreatedPlayer = _appDbContext.tblPlayer.FirstOrDefault(p => p.Identity == userIdentity);
 
-            return new OkObjectResult(newlyCreatedPlayer.Id);
+            //return new OkObjectResult(newlyCreatedPlayer.Id);
+
+            return new OkObjectResult(userIdentity.Id);
 
         }
 

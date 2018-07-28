@@ -31,7 +31,9 @@ namespace LastFrontierApi.Controllers
         {
             var user = await _userManager.FindByIdAsync(userId);
 
-            return Ok(user);
+            var player = _appDbContext.tblPlayer.FirstOrDefault(p => p.Identity == user);
+
+            return Ok(player);
         }
 
         ////[HttpPost]
