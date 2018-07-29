@@ -61,7 +61,7 @@ namespace LastFrontierApi.Controllers
                 occupations.FirstOrDefault(x => x.Id == 1), // Doctor
                 occupations.FirstOrDefault(x => x.Id == 5), // Prospector
                 occupations.FirstOrDefault(x => x.Id == 2), // Socialite
-                occupations.FirstOrDefault(x => x.Id == 4) // Engineer
+                occupations.FirstOrDefault(x => x.Id == 4)  // Engineer
             };
 
             var orderedOccupationsList = new LinkedList<Occupation>(orderedOccupations);
