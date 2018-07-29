@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using LastFrontierApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,10 +22,18 @@ namespace LastFrontierApi.Controllers
             _context = context;
         }
 
+        /*
         [HttpGet]
         public IEnumerable<Character> GetAll()
         {
             return _context.tblCharacter.ToList();
+        }
+        */
+
+        [HttpGet]
+        public IEnumerable<Character> GetCharactersByPlayerId(int playerId)
+        {
+            return _context.tblCharacter.Where(c => c.PlayerId == playerId).ToList();
         }
 
         [HttpPost]
