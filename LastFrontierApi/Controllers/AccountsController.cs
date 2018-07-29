@@ -20,7 +20,6 @@ namespace LastFrontierApi.Controllers
             _userManager = userManager;
             _mapper = mapper;
             _appDbContext = appDbContext;
-
         }
 
         // POST api/accounts
@@ -37,13 +36,10 @@ namespace LastFrontierApi.Controllers
             var userResult = await _userManager.CreateAsync(userIdentity, model.Password);
 
             if (!userResult.Succeeded) { return new BadRequestObjectResult(Errors.AddErrorsToModelState(userResult, ModelState)); }
-            else
-            {
-                await _userManager.AddToRoleAsync(userIdentity, "User");
-            }
 
+            await _userManager.AddToRoleAsync(userIdentity, "User");
 
-            await _appDbContext.tblStaff.AddAsync(new Staff { IdentityId = userIdentity.Id, Location = model.Location });
+            await _appDbContext.tblPlayer.AddAsync(new Player { IdentityId = userIdentity.Id });
             await _appDbContext.SaveChangesAsync();
 
             return new OkObjectResult("Account created");

@@ -9,6 +9,7 @@ namespace LastFrontierApi.Models
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
+        public int PlayerId { get; set; }
         public string Name { get; set; }
         public int? AccumulatedXP { get; set; }
         public int? AvailableXP { get; set; }

@@ -26,7 +26,7 @@ namespace LastFrontierApi.Controllers
         }
 
         [HttpPut]
-        public Character UpdateCharacterById([FromBody] Character character)
+        public Character UpdateOrCreateCharacterById([FromBody] Character character)
         {
             Character characterToUpdate = null;
 
