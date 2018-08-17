@@ -20,5 +20,7 @@ namespace LastFrontierApi.Models
         public DbSet<Species> tblSpecies { get; set; }
         public DbSet<Status> tblStatus { get; set; }
         public DbSet<StressResponse> tblStressResponse { get; set; }
+
+        public DbSet<Event> tblEvent { get; set; }
     }
 }
