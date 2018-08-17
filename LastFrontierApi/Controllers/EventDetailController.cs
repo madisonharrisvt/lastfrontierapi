@@ -16,6 +16,12 @@ namespace LastFrontierApi.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        public Event GetEventById(int eventId)
+        {
+            return _context.tblEvent.FirstOrDefault(e => e.Id == eventId);
+        }
+
         [HttpPut]
         public Event UpdateOrCreateEvent([FromBody] Event lfEvent)
         {
@@ -23,7 +29,7 @@ namespace LastFrontierApi.Controllers
 
             if (lfEvent.Id != 0)
             {
-                eventToUpdate = _context.tblEvent.FirstOrDefault(e => e.Id == eventToUpdate.Id);
+                eventToUpdate = _context.tblEvent.FirstOrDefault(e => e.Id == lfEvent.Id);
             }
 
             if (eventToUpdate != null)
