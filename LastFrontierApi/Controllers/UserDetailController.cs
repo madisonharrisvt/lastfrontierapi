@@ -6,6 +6,7 @@ using LastFrontierApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 
 namespace LastFrontierApi.Controllers
@@ -27,53 +28,34 @@ namespace LastFrontierApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUserById(string userId)
+        public IActionResult GetUserById(int playerId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-
-            var player = _appDbContext.tblPlayer.FirstOrDefault(p => p.Identity == user);
+            var player = _appDbContext.tblPlayer.Include(p => p.Identity).FirstOrDefault(p => p.Id == playerId);
 
             return Ok(player);
         }
 
-        ////[HttpPost]
-        ////public async Task<IActionResult> UpdateOrCreateUser([FromBody]Registration model)
-        ////{
-        ////    if (!ModelState.IsValid)
-        ////    {
-        ////        return BadRequest(ModelState);
-        ////    }
+        [HttpPut]
+        public async Task<ActionResult> Manage([FromBody] JObject player)
+        {
+            var playerToUpdate = _appDbContext.tblPlayer.FirstOrDefault(p => p.Id == (int)player["id"]);
 
-        ////    var userIdentity = _mapper.Map<AppUser>(model);
+            var identity = player["identity"];
 
-        ////    var user = await _userManager.FindByEmailAsync(model.Email);
+            if (playerToUpdate == null) return new BadRequestObjectResult(player);
 
-        ////    if (user != null)
-        ////    {
-        ////        //var userResult = await _userManager.CreateAsync(userIdentity, model.Password);
+            var appUser = await _userManager.FindByIdAsync(playerToUpdate.IdentityId);
+            appUser.FirstName = identity["firstName"].ToString();
+            appUser.LastName = identity["lastName"].ToString();
+            appUser.Email = identity["email"].ToString();
+            appUser.UserName = identity["email"].ToString();
 
-        ////        //if (!userResult.Succeeded) { return new BadRequestObjectResult(Errors.AddErrorsToModelState(userResult, ModelState)); }
+            var result = await _userManager.UpdateAsync(appUser);
 
-        ////        //await _userManager.AddToRoleAsync(userIdentity, "User");
+            if (!result.Succeeded) { return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState)); }
 
-        ////        //await _appDbContext.tblPlayer.AddAsync(new Player { IdentityId = userIdentity.Id });
-        ////        //await _appDbContext.SaveChangesAsync();
+            return Ok();
 
-        ////        //return new OkObjectResult("Account created");
-
-                
-        ////    }
-
-            
-
-        //}
-
-        //[HttpGet]
-        //public IActionResult Get(string userId)
-        //{
-        //    var result = userId;
-
-        //    return Ok(result);
-        //}
+        }
     }
 }
