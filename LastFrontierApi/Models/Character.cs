@@ -26,6 +26,7 @@ namespace LastFrontierApi.Models
         public int? RightLegHealth { get; set; }
         public int? LeftLegHealth { get; set; }
 
+        public Player Player { get; set; }
         public virtual ICollection<CharacterSkill> Skills { get; set; }
     }
 }

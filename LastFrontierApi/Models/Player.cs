@@ -1,4 +1,6 @@
-﻿namespace LastFrontierApi.Models
+﻿using System.Collections.Generic;
+
+namespace LastFrontierApi.Models
 {
     public class Player
     {

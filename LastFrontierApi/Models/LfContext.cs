@@ -17,6 +17,7 @@ namespace LastFrontierApi.Models
         public DbSet<Occupation> tblOccupation { get; set; }
         public DbSet<SideGig> tblSideGig { get; set; }
         public DbSet<Skill> tblSkill { get; set; }
+        public DbSet<CharacterEvent> tblCharacterEvents { get; set; }
         public DbSet<Species> tblSpecies { get; set; }
         public DbSet<Status> tblStatus { get; set; }
         public DbSet<StressResponse> tblStressResponse { get; set; }
