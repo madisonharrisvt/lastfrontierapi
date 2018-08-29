@@ -11,6 +11,7 @@ using FluentValidation.AspNetCore;
 using LastFrontierApi.Auth;
 using LastFrontierApi.Helpers;
 using LastFrontierApi.Models;
+using LastFrontierApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -118,6 +119,8 @@ namespace LastFrontierApi
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             }));
+
+            services.AddScoped<IPlayerService, PlayerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

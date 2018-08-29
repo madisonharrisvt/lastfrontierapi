@@ -20,7 +20,6 @@ namespace LastFrontierApi.Controllers
         [HttpGet("{id}")]
         public Character GetCharacterById(int id)
         {
-            //var character = _context.tblCharacter.Include(s => s.Skills).Include(e => e.Events).FirstOrDefault(c => c.Id == id);
             var character = _context.tblCharacter.Include(s => s.Skills).FirstOrDefault(c => c.Id == id);
 
 

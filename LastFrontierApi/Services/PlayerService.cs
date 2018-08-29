@@ -4,40 +4,26 @@ using System.Threading.Tasks;
 using AutoMapper;
 using LastFrontierApi.Helpers;
 using LastFrontierApi.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 
-namespace LastFrontierApi.Controllers
+namespace LastFrontierApi.Services
 {
-    [Authorize(Policy = "ApiUser", Roles = "Admin")]
-    [Route("api/[controller]")]
-    public class UserManagementController : Controller
+
+    public class PlayerService : IPlayerService
     {
         private readonly ApplicationDbContext _appDbContext;
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
 
-        public UserManagementController(UserManager<AppUser> userManager, IMapper mapper,
-            ApplicationDbContext appDbContext, RoleManager<IdentityRole> roleManager)
+        public PlayerService(UserManager<AppUser> userManager, IMapper mapper,
+            ApplicationDbContext appDbContext)
         {
             _userManager = userManager;
             _mapper = mapper;
             _appDbContext = appDbContext;
         }
 
-        [HttpGet]
-        public IActionResult GetAllUsers()
-        {
-            var players = _appDbContext.tblPlayer.Include(p => p.Identity).ToList();
-
-            return Ok(players);
-        }
-
-        [HttpPut]
-        public async Task<IActionResult> CreatePlayer([FromBody] JObject emailObj)
+        public async Task<Player> CreatePlayerFromEmail(string email)
         {
             var temporaryPassword = RandomString.GetRandomString(16);
 
@@ -45,7 +31,7 @@ namespace LastFrontierApi.Controllers
             {
                 FirstName = null,
                 LastName = null,
-                Email = emailObj["email"].ToString(),
+                Email = email,
                 Password = temporaryPassword
             };
 
@@ -53,7 +39,10 @@ namespace LastFrontierApi.Controllers
 
             var playerResult = await _userManager.CreateAsync(userIdentity, temporaryPassword);
 
-            if (!playerResult.Succeeded) { return new BadRequestObjectResult(Errors.AddErrorsToModelState(playerResult, ModelState)); }
+            if (!playerResult.Succeeded)
+            {
+                throw new Exception("Make this exception better :(");
+            }
 
             await _userManager.AddToRoleAsync(userIdentity, "User");
 
@@ -62,7 +51,7 @@ namespace LastFrontierApi.Controllers
 
             var player = _appDbContext.tblPlayer.FirstOrDefault(p => p.IdentityId == userIdentity.Id);
 
-            return new OkObjectResult(player.Id);
+            return player;
         }
     }
 }
