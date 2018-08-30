@@ -22,7 +22,7 @@ namespace LastFrontierApi
 {
     public class Startup
     {
-        private const string SecretKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // todo: get this from somewhere secure
+        private const string SecretKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // todo: get this from somewhere secure
         private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
 
         public Startup(IConfiguration configuration)
@@ -120,7 +120,10 @@ namespace LastFrontierApi
                     .AllowAnyHeader();
             }));
 
+            // Add model services
             services.AddScoped<IPlayerService, PlayerService>();
+            services.AddScoped<ICharacterService, CharacterService>();
+            services.AddScoped<IEventService, EventService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

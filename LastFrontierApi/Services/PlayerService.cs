@@ -13,14 +13,16 @@ namespace LastFrontierApi.Services
     {
         private readonly ApplicationDbContext _appDbContext;
         private readonly UserManager<AppUser> _userManager;
+        private readonly LfContext _lfContext;
         private readonly IMapper _mapper;
 
         public PlayerService(UserManager<AppUser> userManager, IMapper mapper,
-            ApplicationDbContext appDbContext)
+            ApplicationDbContext appDbContext, LfContext lfContext)
         {
             _userManager = userManager;
             _mapper = mapper;
             _appDbContext = appDbContext;
+            _lfContext = lfContext;
         }
 
         public async Task<Player> CreatePlayerFromEmail(string email)
@@ -52,6 +54,22 @@ namespace LastFrontierApi.Services
             var player = _appDbContext.tblPlayer.FirstOrDefault(p => p.IdentityId == userIdentity.Id);
 
             return player;
+        }
+
+        public async void DeletePlayer(Player player)
+        {
+            _appDbContext.tblPlayer.Remove(player);
+
+            var charactersToDelete = _lfContext.tblCharacter.Where(c => c.PlayerId == player.Id);
+            _lfContext.tblCharacter.RemoveRange(charactersToDelete);
+            _lfContext.SaveChanges();
+
+            var deletePlayerResult = await _userManager.DeleteAsync(player.Identity);
+
+            if (!deletePlayerResult.Succeeded)
+            {
+                throw new Exception("Make this exception better :(");
+            }
         }
     }
 }

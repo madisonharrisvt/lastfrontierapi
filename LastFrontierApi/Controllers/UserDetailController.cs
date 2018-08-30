@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using LastFrontierApi.Helpers;
 using LastFrontierApi.Models;
+using LastFrontierApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,13 +20,16 @@ namespace LastFrontierApi.Controllers
         private readonly ApplicationDbContext _appDbContext;
         private readonly UserManager<AppUser> _userManager;
         private readonly IMapper _mapper;
+        private readonly IPlayerService _playerService;
 
         public UserDetailController(UserManager<AppUser> userManager, IMapper mapper,
-            ApplicationDbContext appDbContext, RoleManager<IdentityRole> roleManager)
+            ApplicationDbContext appDbContext, RoleManager<IdentityRole> roleManager,
+            IPlayerService playerService)
         {
             _userManager = userManager;
             _mapper = mapper;
             _appDbContext = appDbContext;
+            _playerService = playerService;
         }
 
         [HttpGet]
@@ -55,7 +60,24 @@ namespace LastFrontierApi.Controllers
             if (!result.Succeeded) { return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState)); }
 
             return Ok();
+        }
 
+        [HttpDelete("{id}")]
+        public IActionResult DeleteCharacterById(int id)
+        {
+            try
+            {
+                //var userToDelete = await _userManager.FindByEmailAsync(id);
+                var player = _appDbContext.tblPlayer.Include(p => p.Identity).FirstOrDefault(p => p.Id == id);
+                _playerService.DeletePlayer(player);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            return Ok();
         }
     }
 }

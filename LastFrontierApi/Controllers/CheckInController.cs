@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using LastFrontierApi.Helpers;
+using LastFrontierApi.Models;
 using LastFrontierApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,33 +15,41 @@ namespace LastFrontierApi.Controllers
     public class CheckInController : Controller
     {
         private readonly IPlayerService _playerService;
+        private readonly ICharacterService _characterService;
+        private readonly IEventService _eventService;
 
-        public CheckInController(IPlayerService playerService)
+        public CheckInController(IPlayerService playerService, ICharacterService characterService, IEventService eventService)
         {
             _playerService = playerService;
-        }
-
-        // GET api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
+            _characterService = characterService;
+            _eventService = eventService;
         }
 
         [HttpPut]
-        public async Task<IActionResult> CreatePlayer([FromBody] JObject emailObj)
+        public async Task<IActionResult> CreatePlayer([FromBody] CheckInData checkInData)
         {
-            var email = emailObj["email"].ToString();
+            var newPlayerEmail = checkInData.NewPlayerEmail;
+            var newCharacter = checkInData.NewCharacter;
+            var lfEvent = checkInData.Event;
 
             try
             {
-                var player = await _playerService.CreatePlayerFromEmail(email);
+                var player = await _playerService.CreatePlayerFromEmail(newPlayerEmail);
+
+                newCharacter.PlayerId = player.Id;
+
+                var character = _characterService.UpdateOrCreateCharacter(newCharacter);
+
+                _eventService.AddCharacterToEvent(character.Id, lfEvent.Id);
+
+                Email.SendEmail(newPlayerEmail, lfEvent);
+
                 return new OkObjectResult(player.Id);
 
             }
             catch (Exception e)
             {
-                return new BadRequestObjectResult(emailObj);
+                return new BadRequestObjectResult(checkInData);
             }
         }
     }

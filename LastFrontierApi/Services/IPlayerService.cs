@@ -6,5 +6,6 @@ namespace LastFrontierApi.Services
     public interface IPlayerService
     {
         Task<Player> CreatePlayerFromEmail(string email);
+        void DeletePlayer(Player player);
     }
 }
