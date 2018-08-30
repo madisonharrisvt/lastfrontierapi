@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using LastFrontierApi.Models;
+using LastFrontierApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
@@ -12,10 +13,12 @@ namespace LastFrontierApi.Controllers
     public class CharacterEventsController : Controller
     {
         private readonly LfContext _context;
+        private readonly IEventService _eventService;
 
-        public CharacterEventsController(LfContext context)
+        public CharacterEventsController(LfContext context, IEventService eventService)
         {
             _context = context;
+            _eventService = eventService;
         }
 
         [HttpGet("{id}")]
@@ -29,17 +32,10 @@ namespace LastFrontierApi.Controllers
         [HttpPut]
         public IActionResult AddCharacterToEvent([FromBody] JObject body)
         {
-            var characterId = body["characterId"];
-            var eventId = body["eventId"];
+            var characterId = (int)body["characterId"];
+            var eventId = (int)body["eventId"];
 
-            var newCharacterEvent = new CharacterEvent
-            {
-                CharacterId = (int)characterId,
-                EventId = (int)eventId
-            };
-
-            _context.Add(newCharacterEvent);
-            _context.SaveChanges();
+            _eventService.AddCharacterToEvent(characterId, eventId);
 
             return Ok();
         }

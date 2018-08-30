@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using LastFrontierApi.Models;
+using LastFrontierApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,16 +12,17 @@ namespace LastFrontierApi.Controllers
     public class CharacterDetailController : Controller
     {
         private readonly LfContext _context;
+        private readonly ICharacterService _characterService;
 
-        public CharacterDetailController(LfContext context)
+        public CharacterDetailController(LfContext context, ICharacterService characterService)
         {
             _context = context;
+            _characterService = characterService;
         }
 
         [HttpGet("{id}")]
         public Character GetCharacterById(int id)
         {
-            //var character = _context.tblCharacter.Include(s => s.Skills).Include(e => e.Events).FirstOrDefault(c => c.Id == id);
             var character = _context.tblCharacter.Include(s => s.Skills).FirstOrDefault(c => c.Id == id);
 
 
@@ -28,32 +30,9 @@ namespace LastFrontierApi.Controllers
         }
 
         [HttpPut]
-        public Character UpdateOrCreateCharacterById([FromBody] Character character)
+        public Character UpdateOrCreateCharacter([FromBody] Character character)
         {
-            Character characterToUpdate = null;
-
-            if (character.Id != 0)
-            {
-                characterToUpdate = _context.tblCharacter.Include(s => s.Skills).FirstOrDefault(c => c.Id == character.Id);
-            }
-
-            if (characterToUpdate != null)
-            {
-                foreach (var skill in characterToUpdate.Skills)
-                {
-                    _context.tblCharacterSkills.Remove(skill);
-                }
-
-                _context.Entry(characterToUpdate).CurrentValues.SetValues(character);
-            }
-            else
-            {
-                _context.Add(character);
-            }
-
-            _context.tblCharacterSkills.AddRange(character.Skills);
-            _context.SaveChanges();
-            return character;
+            return _characterService.UpdateOrCreateCharacter(character);
         }
 
         [HttpDelete("{id}")]
