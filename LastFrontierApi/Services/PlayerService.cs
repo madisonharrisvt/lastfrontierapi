@@ -62,6 +62,10 @@ namespace LastFrontierApi.Services
 
             var charactersToDelete = _lfContext.tblCharacter.Where(c => c.PlayerId == player.Id);
             _lfContext.tblCharacter.RemoveRange(charactersToDelete);
+
+            var playerNpcShiftsToDelete = _lfContext.tblPlayerNpcShifts.Where(s => s.PlayerId == player.Id);
+            _lfContext.tblPlayerNpcShifts.RemoveRange(playerNpcShiftsToDelete);
+
             _lfContext.SaveChanges();
 
             var deletePlayerResult = await _userManager.DeleteAsync(player.Identity);

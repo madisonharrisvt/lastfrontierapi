@@ -26,7 +26,7 @@ namespace LastFrontierApi.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> CreatePlayer([FromBody] CheckInData checkInData)
+        public async Task<IActionResult> CheckIn([FromBody] CheckInData checkInData)
         {
             var newPlayerEmail = checkInData.NewPlayerEmail;
             var newCharacter = checkInData.NewCharacter;
@@ -42,7 +42,7 @@ namespace LastFrontierApi.Controllers
 
                 _eventService.AddCharacterToEvent(character.Id, lfEvent.Id);
 
-                Email.SendEmail(newPlayerEmail, lfEvent);
+                //Email.SendEmail(newPlayerEmail, lfEvent);
 
                 return new OkObjectResult(player.Id);
 

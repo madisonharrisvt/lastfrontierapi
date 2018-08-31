@@ -26,5 +26,10 @@ namespace LastFrontierApi.Services
             _context.Add(newCharacterEvent);
             _context.SaveChanges();
         }
+
+        public Event GetActiveEvent()
+        {
+            return _context.tblEvent.FirstOrDefault(e => e.IsActiveEvent);
+        }
     }
 }
