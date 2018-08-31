@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using LastFrontierApi.Helpers;
 using LastFrontierApi.Models;
@@ -15,11 +16,14 @@ namespace LastFrontierApi.Controllers
     {
         private readonly LfContext _context;
         private readonly IEventService _eventService;
+        private readonly IPlayerService _playerService;
 
-        public NpcShiftController(LfContext context, IEventService eventService)
+        public NpcShiftController(LfContext context, IEventService eventService,
+            IPlayerService playerService)
         {
             _context = context;
             _eventService = eventService;
+            _playerService = playerService;
         }
 
         [HttpGet]
@@ -40,9 +44,35 @@ namespace LastFrontierApi.Controllers
                 return Ok(npcShifts);
             }
 
-            var npcShiftsWithCounts = _context.Database.ExecuteSqlCommand("GetNpcShiftsWithPlayerCount").To;
+            List<NpcShiftWithCountAndPlayers> npcShiftsWithCountsAndPlayers;
+            try
+            {
+                var npcShiftsWithCounts = _context.Sp_GetNpcShiftsWithPlayerCount.FromSql("GetNpcShiftsWithPlayerCount").ToList();
 
-            return Ok(npcShiftsWithCounts);
+                npcShiftsWithCountsAndPlayers = new List<NpcShiftWithCountAndPlayers>();
+                foreach (var npcShift in npcShiftsWithCounts)
+                {
+                    var players = _playerService.GetPlayersFromNpcShift(npcShift.Id);
+                    var npcShiftWithCountAndPlayers = new NpcShiftWithCountAndPlayers()
+                    {
+                        EventId =  npcShift.EventId,
+                        Id = npcShift.Id,
+                        StartDateTime = npcShift.StartDateTime,
+                        EndDateTime = npcShift.EndDateTime,
+                        NpcCount = npcShift.NpcCount,
+                        Players = players
+                    };
+
+                    npcShiftsWithCountsAndPlayers.Add(npcShiftWithCountAndPlayers);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+            return Ok(npcShiftsWithCountsAndPlayers);
         }
 
         [HttpPut]

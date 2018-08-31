@@ -42,7 +42,7 @@ namespace LastFrontierApi.Controllers
 
                 _eventService.AddCharacterToEvent(character.Id, lfEvent.Id);
 
-                //Email.SendEmail(newPlayerEmail, lfEvent);
+                Email.SendEmail(newPlayerEmail, lfEvent);
 
                 return new OkObjectResult(player.Id);
 

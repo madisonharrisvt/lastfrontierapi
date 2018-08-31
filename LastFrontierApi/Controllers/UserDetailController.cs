@@ -67,7 +67,6 @@ namespace LastFrontierApi.Controllers
         {
             try
             {
-                //var userToDelete = await _userManager.FindByEmailAsync(id);
                 var player = _appDbContext.tblPlayer.Include(p => p.Identity).FirstOrDefault(p => p.Id == id);
                 _playerService.DeletePlayer(player);
 
