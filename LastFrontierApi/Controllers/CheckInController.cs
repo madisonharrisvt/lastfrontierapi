@@ -26,7 +26,7 @@ namespace LastFrontierApi.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> CreatePlayer([FromBody] CheckInData checkInData)
+        public async Task<IActionResult> CheckIn([FromBody] CheckInData checkInData)
         {
             var newPlayerEmail = checkInData.NewPlayerEmail;
             var newCharacter = checkInData.NewCharacter;

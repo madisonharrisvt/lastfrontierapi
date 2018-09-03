@@ -23,5 +23,11 @@ namespace LastFrontierApi.Models
         public DbSet<StressResponse> tblStressResponse { get; set; }
 
         public DbSet<Event> tblEvent { get; set; }
+
+        public DbSet<NpcShift> tblNpcShift { get; set; }
+        public DbSet<PlayerNpcShifts> tblPlayerNpcShifts { get; set; }
+
+        //public DbQuer
+        public DbQuery<NpcShiftWithPlayerCount> Sp_GetNpcShiftsWithPlayerCount { get; set; }
     }
 }
