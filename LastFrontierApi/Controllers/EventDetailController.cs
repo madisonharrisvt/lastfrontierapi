@@ -25,7 +25,15 @@ namespace LastFrontierApi.Controllers
         [HttpPut]
         public Event UpdateOrCreateEvent([FromBody] Event lfEvent)
         {
+
             Event eventToUpdate = null;
+
+            var lfEventStartTime = lfEvent.StartDate.TimeOfDay;
+            lfEvent.StartDate = lfEvent.StartDate.Subtract(lfEventStartTime);
+
+            var lfEventEndTime = lfEvent.EndDate.TimeOfDay;
+            lfEvent.EndDate = lfEvent.EndDate.Subtract(lfEventEndTime);
+
 
             if (lfEvent.Id != 0)
             {

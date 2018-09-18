@@ -52,7 +52,7 @@ namespace LastFrontierApi.Controllers
             var userIdentity = _mapper.Map<AppUser>(newUser);
 
             var playerResult = await _userManager.CreateAsync(userIdentity, temporaryPassword);
-
+            
             if (!playerResult.Succeeded) { return new BadRequestObjectResult(Errors.AddErrorsToModelState(playerResult, ModelState)); }
 
             await _userManager.AddToRoleAsync(userIdentity, "User");
