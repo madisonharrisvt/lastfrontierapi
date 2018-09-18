@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace LastFrontierApi.Controllers
@@ -33,11 +34,19 @@ namespace LastFrontierApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetUserById(int playerId)
+        public async Task<IActionResult> GetUserById(int playerId)
         {
             var player = _appDbContext.tblPlayer.Include(p => p.Identity).FirstOrDefault(p => p.Id == playerId);
 
-            return Ok(player);
+            if (player == null) return new BadRequestObjectResult($"Could not find player with id {playerId}");
+
+            var user = await _userManager.FindByEmailAsync(player.Identity.Email);
+            var role = await _userManager.GetRolesAsync(user);
+
+            var playerObj = JObject.FromObject(player);
+            playerObj.Add("role", role.FirstOrDefault());
+
+            return Ok(playerObj);
         }
 
         [HttpPut]
