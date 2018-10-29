@@ -22,18 +22,11 @@ namespace LastFrontierApi.Controllers
             _context = context;
         }
 
-        /*
-        [HttpGet]
-        public IEnumerable<Character> GetAll()
-        {
-            return _context.tblCharacter.ToList();
-        }
-        */
-
         [HttpGet]
         public IEnumerable<Character> GetCharactersByPlayerId(int playerId)
         {
-            return _context.tblCharacter.Where(c => c.PlayerId == playerId).ToList();
+            var characters = _context.tblCharacter.Where(c => c.PlayerId == playerId).ToList();
+            return characters;
         }
 
         [HttpPost]
