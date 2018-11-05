@@ -13,5 +13,6 @@ namespace LastFrontierApi.Models
         public int PurchaseXp { get; set; }
 
         public Cart Cart { get; set; }
+        public Character character { get; set; }
     }
 }

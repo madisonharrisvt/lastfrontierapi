@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LastFrontierApi.Controllers
 {
-    [Authorize(Policy = "ApiUser", Roles = "Admin")]
+    [Authorize(Policy = "ApiUser", Roles = "Admin, User")]
     [Route("api/[controller]")]
     public class ActiveEventController : Controller
     {

@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 
 namespace LastFrontierApi.Controllers
 {
-    [Authorize(Policy = "ApiUser", Roles = "Admin")]
+    [Authorize(Policy = "ApiUser", Roles = "Admin, User")]
     [Route("api/[controller]")]
     public class UserManagementController : Controller
     {

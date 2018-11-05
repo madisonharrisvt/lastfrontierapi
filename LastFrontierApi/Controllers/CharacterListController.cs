@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace LastFrontierApi.Controllers
 {
-    [Authorize(Policy = "ApiUser", Roles = "Admin")]
+    [Authorize(Policy = "ApiUser", Roles = "Admin, User")]
     [Route("api/[controller]")]
     public class CharacterListController : Controller
     {
@@ -29,6 +29,7 @@ namespace LastFrontierApi.Controllers
             return characters;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public Character Post([FromBody]JObject body)
         {

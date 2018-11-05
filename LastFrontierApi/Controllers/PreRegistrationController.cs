@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 
 namespace LastFrontierApi.Controllers
 {
-    [Authorize(Policy = "ApiUser")]
+    [Authorize(Policy = "ApiUser", Roles = "Admin, User")]
     [Route("api/[controller]")]
     public class PreRegistrationController : ControllerBase
     {
@@ -34,7 +35,7 @@ namespace LastFrontierApi.Controllers
             var player = _appDbContext.tblPlayer.Include(p => p.Identity)
                 .FirstOrDefault(p => p.Identity.Equals(user));
 
-            if (player == null) return new BadRequestObjectResult("Unable to find player");
+            if (player == null) return BadRequest("Unable to find player");
 
             return Ok(player);
         }
@@ -62,9 +63,31 @@ namespace LastFrontierApi.Controllers
 
                 if (activeEvent == null) return BadRequest("Unable to retrieve the active event");
 
+                var paidCarts = _lfContext.tblCart.Include(c => c.CartItems).Where(c =>
+                    c.PlayerId == player.Id && c.EventId == activeEvent.Id && c.Paid);           
+
+                if (paidCarts.Any())
+                {
+                    var charactersAlreadyPaid = string.Empty;
+                    foreach (var paidCart in paidCarts)
+                    {
+                        foreach (var cartItem in cart.CartItems)
+                        {
+                            var paidCharacterCartItem = paidCart.CartItems.FirstOrDefault(pci => pci.CharacterId == cartItem.CharacterId);
+                            if (paidCharacterCartItem == null) continue;
+                            var paidCharacter =
+                                _lfContext.tblCharacter.FirstOrDefault(c => c.Id == paidCharacterCartItem.CharacterId);
+                            if (paidCharacter != null) charactersAlreadyPaid = charactersAlreadyPaid + " " + paidCharacter.Name;
+                        }
+                    }
+
+                    if (charactersAlreadyPaid != string.Empty)
+                        return BadRequest("You have already registered characters: " + charactersAlreadyPaid  + ". They cannot be registered again.");
+                }
+
                 cart.PlayerId = player.Id;
                 cart.EventId = activeEvent.Id;
-                cart.CreatedDate = System.DateTime.UtcNow;
+                cart.CreatedDate = DateTime.UtcNow;
                 cart.Key = Guid.NewGuid();
                 cart.Paid = false;
 

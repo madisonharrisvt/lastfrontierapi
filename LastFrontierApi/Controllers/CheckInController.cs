@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace LastFrontierApi.Controllers
 {
-    [Authorize(Policy = "ApiUser", Roles = "Admin")]
+    [Authorize(Policy = "ApiUser", Roles = "User")]
     [Route("api/[controller]")]
     public class CheckInController : Controller
     {
@@ -42,7 +42,7 @@ namespace LastFrontierApi.Controllers
 
                 _eventService.AddCharacterToEvent(character.Id, lfEvent.Id);
 
-                Email.SendEmail(newPlayerEmail, lfEvent);
+                Email.SendCheckInEmail(newPlayerEmail, lfEvent);
 
                 return new OkObjectResult(player.Id);
 
