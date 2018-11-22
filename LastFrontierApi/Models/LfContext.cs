@@ -1,4 +1,5 @@
-﻿using LastFrontierApi.Models.Metadata;
+﻿using System.Collections.Generic;
+using LastFrontierApi.Models.Metadata;
 using Microsoft.EntityFrameworkCore;
 
 namespace LastFrontierApi.Models
@@ -32,6 +33,7 @@ namespace LastFrontierApi.Models
 
         
         public DbQuery<NpcShiftWithPlayerCount> Sp_GetNpcShiftsWithPlayerCount { get; set; }
+        public DbQuery<PlayerId> Sp_GetPlayersWithoutNpcShiftForActiveEvent { get; set; }
 
     }
 }
