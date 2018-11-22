@@ -28,6 +28,7 @@ namespace LastFrontierApi.Controllers
             _appDbContext = appDbContext;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult GetAllUsers()
         {
@@ -36,6 +37,7 @@ namespace LastFrontierApi.Controllers
             return Ok(players);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<IActionResult> CreatePlayer([FromBody] JObject emailObj)
         {
@@ -57,7 +59,7 @@ namespace LastFrontierApi.Controllers
 
             await _userManager.AddToRoleAsync(userIdentity, "User");
 
-            await _appDbContext.tblPlayer.AddAsync(new Player { IdentityId = userIdentity.Id });
+            await _appDbContext.tblPlayer.AddAsync(new Player { IdentityId = userIdentity.Id, VolunteerPoints = 0 });
             await _appDbContext.SaveChangesAsync();
 
             var player = _appDbContext.tblPlayer.FirstOrDefault(p => p.IdentityId == userIdentity.Id);

@@ -32,7 +32,8 @@ namespace LastFrontierApi.Controllers
                 .Select(c => new Character
                 {
                     Name = c.Name,
-                    Id = c.Id
+                    Id = c.Id,
+                    PlayerId = c.PlayerId
                 }).ToList();
 
             return characters;

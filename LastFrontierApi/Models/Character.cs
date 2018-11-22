@@ -28,7 +28,7 @@ namespace LastFrontierApi.Models
 
         public Player Player { get; set; }
         public virtual ICollection<CharacterSkill> Skills { get; set; }
-
         public virtual ICollection<CartItem> CartItems { get; set; }
+        public virtual ICollection<CharacterEvent> Events { get; set; }
     }
 }

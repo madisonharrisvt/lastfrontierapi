@@ -12,7 +12,7 @@ using Stripe;
 
 namespace LastFrontierApi.Controllers
 {
-    [Authorize(Policy = "ApiUser", Roles = "Admin, User")]
+    [Authorize(Policy = "ApiUser", Roles = "Admin")]
     [Route("api/[controller]")]
     public class CheckOutController : ControllerBase
     {
@@ -20,7 +20,7 @@ namespace LastFrontierApi.Controllers
         private readonly ApplicationDbContext _appDbContext;
         private readonly LfContext _lfContext;
 
-        private const string StripeKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // todo: get production key when publishing
+        private const string StripeKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // todo: get production key when publishing
 
         public CheckOutController(UserManager<AppUser> userManager, ApplicationDbContext appDbContext, LfContext lfContext)
         {
@@ -77,13 +77,12 @@ namespace LastFrontierApi.Controllers
                 var service = new StripeChargeService();
                 var charge = service.Create(options);
 
-                //if (charge.Outcome.StripeResponse.)
-
                 cart.Paid = true;
 
                 _lfContext.tblCart.Update(cart);
 
                 player.VolunteerPoints = player.VolunteerPoints - totalVp;
+                player.VolunteerPoints += 10;
 
                 _appDbContext.tblPlayer.Update(player);
                 _appDbContext.SaveChanges();
@@ -160,7 +159,8 @@ namespace LastFrontierApi.Controllers
                     OrderID = cart.Key,
                     BillingDetails = billingDetails,
                     GrandTotal = amount,
-                    Event = currentEvent
+                    Event = currentEvent,
+                    RemainingVp = (int) player.VolunteerPoints
                 };
 
 

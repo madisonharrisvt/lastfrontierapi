@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web;
 using AutoMapper;
 using LastFrontierApi.Helpers;
@@ -34,7 +35,15 @@ namespace LastFrontierApi.Controllers
 
             var result = await _userManager.ResetPasswordAsync(user, token, password);
 
-            if (!result.Succeeded) { return new BadRequestResult(); }
+            if (!result.Succeeded)
+            {
+                var errorList = new Dictionary<string, string>();
+                foreach (var error in result.Errors)
+                {
+                    errorList.Add(error.Code, error.Description);
+                }
+                return BadRequest(errorList);
+            }
 
             return Ok();
         }

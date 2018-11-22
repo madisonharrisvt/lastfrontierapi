@@ -25,7 +25,7 @@ namespace LastFrontierApi.Controllers
         [HttpGet]
         public IEnumerable<Character> GetCharactersByPlayerId(int playerId)
         {
-            var characters = _context.tblCharacter.Where(c => c.PlayerId == playerId).ToList();
+            var characters = _context.tblCharacter.Include(c => c.Events).Where(c => c.PlayerId == playerId).ToList();
             return characters;
         }
 

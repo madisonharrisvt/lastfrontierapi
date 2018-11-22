@@ -12,8 +12,8 @@ namespace LastFrontierApi.Helpers
 {
     public class Email
     {
-        private const string FromAddress = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-        private const string FromPassword = "xxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+        private const string FromAddress = "lxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+        private const string FromPassword = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
         public static void SendCheckInEmail(string email, Event lfEvent)
         {
             var toAddress = new MailAddress(email, " ");
@@ -57,7 +57,10 @@ namespace LastFrontierApi.Helpers
 <head>
 <style>
 * {{
-    font-family: arial, sans-serif;
+    font-family: Courier, sans-serif;
+    color: #ffff;
+    background-color: #1a2f4f;
+
 }}
 table {{
     width: 100%;
@@ -67,24 +70,27 @@ td, th {{
     border: 1px solid #ccdef1;
     text-align: left;
     padding: 8px;
+    line-height: 11px;
 }}
 
 tr:nth-child(even) {{
-    background-color: #ccdef1;
+    background-color: #304c77;
 }}
 .order-summary-container {{
+    background-color: #1a2f4f;
     width: 50%;
     margin-left: auto;
     margin-right: auto;
 }}
 
 td:last-child {{
-    background-color: #FFF;
+    background-color: #1a2f4f;
     border: none;
     text-align: right;
 }}
 
 th:last-child {{
+    background-color: #1a2f4f;
     border: none;
     text-align: right;
 }}
@@ -97,23 +103,52 @@ th:last-child {{
     font-size: small;
     line-height: 7px;
 }}
+.center {{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}}
+.impact {{
+    font-family: Impact, sans-serif;
+}}
+.left-justify {{
+    float: left;
+    text-align:left!important;
+}}
+.billing-info {{
+    border: none;
+    padding-left: 0px;
+}}
+.width {{
+    width: 60%;
+}}
+
 </style>
 </head>
 <body>
 
+<img src='https://preview.ibb.co/bWYYa0/Email-Confermation-Header-Option-1-Copy.png' alt='Last Frontier' class='center' width=65%;>
+
 <div class='order-summary-container'>
-    <h1>Order Confirmed: ${details.OrderID}</h1>
+    <h1 style='font-family:Impact; font-size: 30px; color: #cc9933'>★<font color='ffff' class='impact'>Order Confirmed: ${details.OrderID}</font></h1>
     <p>Thank you for your purchase with Last Frontier.  You have been successfully pre-registered for Event: {details.Event.Title}. All XP (detailed below) has been applied to your characters.</p>
 
     <div class='billing-info'>
-        <p><strong>BILLED TO:</strong></p>
-        <p>{details.BillingDetails.Name}</p>
-        <p>{details.BillingDetails.AddressLine1}</p>
-        <p>{details.BillingDetails.AddressCity}, {details.BillingDetails.AddressState} {details.BillingDetails.AddressZip}</p>
-        <p>{details.Email}</p>
+        <p style='font-family:Impact; font-size: 20px;'>BILLED TO:</p>
+        <table class='width'>
+            <tr>
+                <td class='billing-info'>{details.BillingDetails.Name}<br></br>
+                    {details.BillingDetails.AddressLine1}<br></br>
+                    {details.BillingDetails.AddressCity}, {details.BillingDetails.AddressState} {details.BillingDetails.AddressZip}
+                </td>
+                <td class='left-justify'>
+                    {details.Email}
+                </td>
+            </tr>
+        </table>
     </div>
 
-    <h2>Order Summary</h2>
+    <h2 style='font-family:Impact; font-size: 30px;'>Order Summary</h2>
     <table>
         <tr>
             <th>Character</th>
@@ -137,7 +172,7 @@ th:last-child {{
     <td>{character.CartItem.VpToXp}</td>
     <td>{character.CartItem.PurchaseXp}</td>
     <td>${character.BaseXpCost}.00</td>
-    <td>${character.CartItem.VpToXp}.00</td>
+    <td>${character.CartItem.PurchaseXp}.00</td>
     <td>{totalXp}XP ${totalCost}.00</td>
 </tr>
 ";
@@ -150,7 +185,9 @@ body += $@"
 
     <p class='total'><strong>TOTAL:</strong> ${details.GrandTotal}.00</p> 
 
-    <p><strong>Remaining VP: </strong> 30</p>
+    <p><strong>Remaining VP: </strong> {details.RemainingVp} </p>
+    
+    <img src='https://lastfrontierlarp.com/wp-content/uploads/2018/10/Last-Frontier-Logo-Transparent.png' alt='Last Frontier' class='center' width=40%;>
 </div>
 </body>
 </html>

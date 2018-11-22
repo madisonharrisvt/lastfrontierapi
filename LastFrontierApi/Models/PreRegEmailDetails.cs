@@ -12,5 +12,6 @@ namespace LastFrontierApi.Models
         public StripeCard BillingDetails { get; set; }
         public int GrandTotal { get; set; }
         public Event Event { get; set; }
+        public int RemainingVp { get; set; }
     }
 }

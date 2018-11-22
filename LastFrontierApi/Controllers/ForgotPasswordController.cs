@@ -29,6 +29,8 @@ namespace LastFrontierApi.Controllers
             var email = resetObj["email"].ToString();
             var user = await _userManager.FindByEmailAsync(email);
 
+            if (user == null) return BadRequest("Unable to find user with email '" + email + "'");
+
             var passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             Email.SendPasswordResetLink(email, passwordResetToken);
