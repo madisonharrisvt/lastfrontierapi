@@ -47,12 +47,13 @@ namespace LastFrontierApi.Controllers
                 return new BadRequestObjectResult(addRoleResult);
             }
 
-            var removeRoleResut = await _userManager.RemoveFromRolesAsync(user, usersRoles);
+            /*var removeRoleResut = await _userManager.RemoveFromRolesAsync(user, usersRoles);
 
             if (!removeRoleResut.Succeeded)
             {
                 return new BadRequestObjectResult($"Role {role} was successfully added, but {removeRoleResut}");
             }
+            */
 
             return Ok();
 

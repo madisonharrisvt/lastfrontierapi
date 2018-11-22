@@ -53,10 +53,15 @@ namespace LastFrontierApi.Controllers
         public async Task<ActionResult> Manage([FromBody] JObject player)
         {
             var playerToUpdate = _appDbContext.tblPlayer.FirstOrDefault(p => p.Id == (int)player["id"]);
+            var volunteerPoints = 0;
+
+            if (player.ContainsKey("volunteerPoints")) volunteerPoints = (int) player["volunteerPoints"];
+
+            if (playerToUpdate == null) return BadRequest("Unable to find given player.");
+
+            playerToUpdate.VolunteerPoints = volunteerPoints;
 
             var identity = player["identity"];
-
-            if (playerToUpdate == null) return new BadRequestObjectResult(player);
 
             var appUser = await _userManager.FindByIdAsync(playerToUpdate.IdentityId);
             appUser.FirstName = identity["firstName"].ToString();
@@ -66,7 +71,13 @@ namespace LastFrontierApi.Controllers
 
             var result = await _userManager.UpdateAsync(appUser);
 
-            if (!result.Succeeded) { return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState)); }
+            if (!result.Succeeded)
+            {
+                return new BadRequestObjectResult(Errors.AddErrorsToModelState(result, ModelState));
+            }
+
+            _appDbContext.Update(playerToUpdate);
+            _appDbContext.SaveChanges();
 
             return Ok();
         }

@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace LastFrontierApi.Controllers
 {
-    [Authorize(Policy = "ApiUser", Roles = "Admin")]
+    [Authorize(Policy = "ApiUser", Roles = "Admin, User")]
     [Route("api/[controller]")]
     public class CharacterListController : Controller
     {
@@ -22,20 +22,14 @@ namespace LastFrontierApi.Controllers
             _context = context;
         }
 
-        /*
-        [HttpGet]
-        public IEnumerable<Character> GetAll()
-        {
-            return _context.tblCharacter.ToList();
-        }
-        */
-
         [HttpGet]
         public IEnumerable<Character> GetCharactersByPlayerId(int playerId)
         {
-            return _context.tblCharacter.Where(c => c.PlayerId == playerId).ToList();
+            var characters = _context.tblCharacter.Include(c => c.Events).Where(c => c.PlayerId == playerId).ToList();
+            return characters;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public Character Post([FromBody]JObject body)
         {

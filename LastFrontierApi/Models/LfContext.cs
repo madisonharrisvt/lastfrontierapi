@@ -27,7 +27,11 @@ namespace LastFrontierApi.Models
         public DbSet<NpcShift> tblNpcShift { get; set; }
         public DbSet<PlayerNpcShifts> tblPlayerNpcShifts { get; set; }
 
-        //public DbQuer
+        public DbSet<Cart> tblCart { get; set; }
+        public DbSet<CartItem> tblCartItem { get; set; }
+
+        
         public DbQuery<NpcShiftWithPlayerCount> Sp_GetNpcShiftsWithPlayerCount { get; set; }
+
     }
 }
