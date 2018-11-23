@@ -67,5 +67,23 @@ namespace LastFrontierApi.Controllers
 
             return Ok();
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeletePlayerNpcShift(int id)
+        {
+            try
+            {
+                var playerNpcShift = _context.tblPlayerNpcShifts.FirstOrDefault(p => p.Id == id);
+                if (playerNpcShift == null) throw new Exception("Could not find PlayerNpcShift with id '" + id + "'!");
+                _context.tblPlayerNpcShifts.Remove(playerNpcShift);
+                _context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+            
+        }
     }
 }

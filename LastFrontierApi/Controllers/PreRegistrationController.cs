@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -55,8 +56,19 @@ namespace LastFrontierApi.Controllers
                 var userName = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var user = await _userManager.FindByEmailAsync(userName);
 
-                var player = _appDbContext.tblPlayer.Include(p => p.Identity)
-                    .FirstOrDefault(p => p.Identity.Equals(user));
+                var roles = await _userManager.GetRolesAsync(user);
+
+                Player player;
+                if (!roles.Contains("Admin"))
+                {
+                    player = _appDbContext.tblPlayer.Include(p => p.Identity)
+                        .FirstOrDefault(p => p.Identity.Equals(user));
+                }
+                else
+                {
+                    var playerId = cart.PlayerId;
+                    player = _appDbContext.tblPlayer.Include(p => p.Identity).FirstOrDefault(p => p.Id == playerId);
+                }
 
                 if (player == null) return BadRequest("Unable to find player");
 
@@ -65,7 +77,7 @@ namespace LastFrontierApi.Controllers
                 if (activeEvent == null) return BadRequest("Unable to retrieve the active event");
 
                 var paidCarts = _lfContext.tblCart.Include(c => c.CartItems).Where(c =>
-                    c.PlayerId == player.Id && c.EventId == activeEvent.Id && c.Paid);           
+                    c.PlayerId == player.Id && c.EventId == activeEvent.Id && c.Paid).ToList();
 
                 if (paidCarts.Any())
                 {

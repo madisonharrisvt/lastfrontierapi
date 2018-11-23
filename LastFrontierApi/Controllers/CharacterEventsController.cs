@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -66,6 +67,24 @@ namespace LastFrontierApi.Controllers
             _eventService.AddCharacterToEvent(characterId, eventId);
 
             return Ok();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpDelete("{id}")]
+        public IActionResult DeleteCharacterFromEvent(int id)
+        {
+            try
+            {
+                var characterEvent = _context.tblCharacterEvents.FirstOrDefault(c => c.Id == id);
+                if (characterEvent == null) return BadRequest("Could not find character event with id '" + id + "'!");
+                _context.tblCharacterEvents.Remove(characterEvent);
+                _context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }
