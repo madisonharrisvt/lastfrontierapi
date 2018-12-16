@@ -41,7 +41,7 @@ namespace LastFrontierApi.Controllers
             return Ok(player);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<IActionResult> AddToCart([FromBody] Cart cart)
         {
