@@ -12,7 +12,7 @@ using Stripe;
 
 namespace LastFrontierApi.Controllers
 {
-    [Authorize(Policy = "ApiUser", Roles = "Admin")]
+    [Authorize(Policy = "ApiUser", Roles = "Admin, User")]
     [Route("api/[controller]")]
     public class CheckOutController : ControllerBase
     {
@@ -22,19 +22,21 @@ namespace LastFrontierApi.Controllers
 
         private const string StripeKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // todo: get production key when publishing
 
-        public CheckOutController(UserManager<AppUser> userManager, ApplicationDbContext appDbContext, LfContext lfContext)
+    public CheckOutController(UserManager<AppUser> userManager, ApplicationDbContext appDbContext, LfContext lfContext)
         {
             _userManager = userManager;
             _appDbContext = appDbContext;
             _lfContext = lfContext;
         }
-        
+
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult CheckOut([FromBody] JObject token)
         {
-            StripeConfiguration.SetApiKey(StripeKey);
             try
             {
+                StripeConfiguration.SetApiKey(StripeKey);
+
                 var amount = 0;
                 var totalVp = 0;
                 var totalXp = 0;
@@ -71,7 +73,7 @@ namespace LastFrontierApi.Controllers
                 {
                     Amount = amount * 100,
                     Currency = "usd",
-                    Description = "Test Charge",
+                    Description = $"Pre-registration for event '{currentEvent.Title}'",
                     SourceTokenOrExistingSourceId = token["id"].ToString(),
                 };
                 var service = new StripeChargeService();

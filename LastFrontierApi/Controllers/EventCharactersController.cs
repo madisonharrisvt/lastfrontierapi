@@ -4,6 +4,8 @@ using LastFrontierApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace LastFrontierApi.Controllers
 {
@@ -12,18 +14,36 @@ namespace LastFrontierApi.Controllers
     public class EventCharactersController : Controller
     {
         private readonly LfContext _context;
+        private readonly ApplicationDbContext _appDbContext;
 
-        public EventCharactersController(LfContext context)
+        public EventCharactersController(LfContext context, ApplicationDbContext appDbContext)
         {
-            _context = context;
+          _context = context;
+          _appDbContext = appDbContext;
         }
 
         [HttpGet("{id}")]
-        public ICollection<CharacterEvent> GetCharacterById(int id)
+        public IActionResult GetCharactersForEventId(int id)
         {
-            var characterEvents = _context.tblCharacterEvents.Include(ce => ce.Character).Where(c => c.EventId == id).ToList();
+          var characterEvents = _context.tblCharacterEvents.Include(ce => ce.Character).Where(c => c.EventId == id).ToList();
 
-            return characterEvents;
+          var characterEventsWithPlayers = new List<CharacterEventWithPlayer>();
+
+          foreach (var characterEvent in characterEvents)
+          {
+
+            var player = _appDbContext.tblPlayer.Include(p => p.Identity).FirstOrDefault(p => p.Id == characterEvent.Character.PlayerId);
+            var playerJson = JObject.FromObject(player);
+
+            var characterEventWithPlayer = new CharacterEventWithPlayer()
+            {
+              CharacterEvent = characterEvent,
+              Player = player
+            };
+            characterEventsWithPlayers.Add(characterEventWithPlayer);
+          }
+
+          return Ok(characterEventsWithPlayers);
         }
 
         [HttpPut]
