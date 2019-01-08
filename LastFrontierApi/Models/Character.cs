@@ -19,6 +19,7 @@ namespace LastFrontierApi.Models
         public bool? CloneStatus { get; set; }
         public int? Occupation { get; set; }
         public int? SideGig { get; set; }
+        public int? Culture { get; set; }
         public int? Status { get; set; }
         public int? TorsoHealth { get; set; }
         public int? RightArmHealth { get; set; }

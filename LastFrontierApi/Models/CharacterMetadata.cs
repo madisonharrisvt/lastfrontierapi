@@ -1,4 +1,5 @@
-﻿using LastFrontierApi.Models.Metadata;
+﻿using System.Globalization;
+using LastFrontierApi.Models.Metadata;
 
 namespace LastFrontierApi.Models
 {
@@ -10,5 +11,6 @@ namespace LastFrontierApi.Models
         public Species[] Species { get; set; }
         public Status[] Statuses { get; set; }
         public StressResponse[] StressResponses { get; set; }
+        public Culture[] Cultures { get; set; }
     }
 }
