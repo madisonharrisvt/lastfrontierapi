@@ -91,7 +91,7 @@ namespace LastFrontierApi.Services
       toSet.SetValue(speciesName, false);
       fields.TryGetValue("Psycological Profile", out toSet);
       toSet.SetValue(psyProfileName, false);
-      fields.TryGetValue("Health Status", out toSet);
+      fields.TryGetValue("Ailments", out toSet);
       toSet.SetValue(healthStatusName, false);
       fields.TryGetValue("Culture", out toSet);
       toSet.SetValue(cultureName, false);

@@ -7,6 +7,16 @@ namespace LastFrontierApi.Extensions
 {
   public static class ResultExtensions
   {
+    public static T ThrowIfNull<T>(this T item, string name)
+    {
+      if (item == null)
+      {
+        throw new Exception($"'{name}' cannot be null!");
+      }
+
+      return item;
+    }
+
     public static Result<int> AsInt(this string str)
     {
       var r = new Result<int>();
