@@ -7,7 +7,6 @@ using LastFrontierApi.Models;
 using LastFrontierApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.Cms;
 
 namespace LastFrontierApi.Controllers
 {
