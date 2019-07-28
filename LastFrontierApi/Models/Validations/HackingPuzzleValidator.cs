@@ -17,7 +17,8 @@ namespace LastFrontierApi.Models.Validations
         })
         .WithMessage("Cannot have duplicate filler words");
       RuleFor(hp => hp.Rows).Must(row => row.Select(r => r.IsAnswer).Any()).WithMessage("Answer is required!");
-      RuleFor(hp => hp.Rows).Must(row => row.Select(r => r.IsAnswer).Count() > 1).WithMessage("Cannot have more than one answer!");
+      RuleFor(hp => hp.Rows).Must(row => row.Select(r => r.IsAnswer).Count() > 1)
+        .WithMessage("Cannot have more than one answer!");
     }
   }
 }

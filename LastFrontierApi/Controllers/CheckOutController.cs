@@ -16,10 +16,11 @@ namespace LastFrontierApi.Controllers
   [Route("api/[controller]")]
   public class CheckOutController : ControllerBase
   {
+    private const string
+      StripeKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // todo: get production key when publishing
+
     private readonly ApplicationDbContext _appDbContext;
     private readonly LfContext _lfContext;
-
-    private const string StripeKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"; // todo: get production key when publishing
 
     public CheckOutController(ApplicationDbContext appDbContext, LfContext lfContext)
     {

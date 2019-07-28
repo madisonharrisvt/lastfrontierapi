@@ -1,13 +1,12 @@
-﻿using System.Linq;
-using FluentValidation;
+﻿using FluentValidation;
 
 namespace LastFrontierApi.Models.Validations
 {
-    public class CartValidator : AbstractValidator<Cart>
+  public class CartValidator : AbstractValidator<Cart>
+  {
+    public CartValidator()
     {
-        public CartValidator()
-        {
-            RuleFor(vm => vm.CartItems).SetCollectionValidator(new CartItemValidator());
-        }
+      RuleFor(vm => vm.CartItems).SetCollectionValidator(new CartItemValidator());
     }
+  }
 }

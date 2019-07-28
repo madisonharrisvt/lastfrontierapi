@@ -12,9 +12,9 @@ namespace LastFrontierApi.Services
   public class PdfService : IPdfService
   {
     private readonly ApplicationDbContext _appDbContext;
-    private readonly UserManager<AppUser> _userManager;
     private readonly LfContext _lfContext;
     private readonly IMapper _mapper;
+    private readonly UserManager<AppUser> _userManager;
 
     public PdfService(ApplicationDbContext appDbContext, LfContext lfContext)
     {

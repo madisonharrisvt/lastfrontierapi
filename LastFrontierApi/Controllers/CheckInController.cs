@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using LastFrontierApi.Extensions;
-using LastFrontierApi.Helpers;
 using LastFrontierApi.Models;
 using LastFrontierApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -14,11 +12,11 @@ namespace LastFrontierApi.Controllers
   [Route("api/[controller]")]
   public class CheckInController : Controller
   {
+    private readonly ApplicationDbContext _appDbContext;
     private readonly ICharacterService _characterService;
     private readonly IEventService _eventService;
-    private readonly IPlayerService _playerService;
-    private readonly ApplicationDbContext _appDbContext;
     private readonly LfContext _lfContext;
+    private readonly IPlayerService _playerService;
 
     public CheckInController(IPlayerService playerService, ICharacterService characterService,
       IEventService eventService, ApplicationDbContext appDbContext, LfContext lfContext)
@@ -46,13 +44,13 @@ namespace LastFrontierApi.Controllers
           characterTotalXp += cartItem.PurchaseXp;
           characterTotalXp += cartItem.VpToXp;
 
-          var character = _lfContext.tblCharacter.FirstOrDefault(c => c.Id == cartItem.CharacterId).ThrowIfNull($"Character with ID '{cartItem.CharacterId}'");
+          var character = _lfContext.tblCharacter.FirstOrDefault(c => c.Id == cartItem.CharacterId)
+            .ThrowIfNull($"Character with ID '{cartItem.CharacterId}'");
 
           if (_lfContext.tblCharacterEvents.FirstOrDefault(ce =>
                 ce.CharacterId == character.Id && ce.EventId == currentEvent.Id) != null)
-          {
-            return BadRequest($"Character '{character.Name}' has already been registered for this event! Please remove.");
-          }
+            return BadRequest(
+              $"Character '{character.Name}' has already been registered for this event! Please remove.");
 
           if (character.AccumulatedXP == null) character.AccumulatedXP = 0;
           if (character.AvailableXP == null) character.AvailableXP = 0;

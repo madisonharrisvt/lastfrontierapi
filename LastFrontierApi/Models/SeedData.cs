@@ -1,26 +1,25 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LastFrontierApi.Models
 {
-    public static class SeedData
+  public static class SeedData
+  {
+    public static void Initialize(IServiceProvider serviceProvider)
     {
-        public static void Initialize(IServiceProvider serviceProvider)
-        {
-            using (var context = new LfContext(
-                serviceProvider.GetRequiredService<DbContextOptions<LfContext>>()))
-            {
-                //if (context.tblCharacter.Any())
-                //{
-                //    return;
-                //}
-                //else
-                //{
-                //    throw new Exception();
-                //}
-            }
-        }
+      using (var context = new LfContext(
+        serviceProvider.GetRequiredService<DbContextOptions<LfContext>>()))
+      {
+        //if (context.tblCharacter.Any())
+        //{
+        //    return;
+        //}
+        //else
+        //{
+        //    throw new Exception();
+        //}
+      }
     }
+  }
 }

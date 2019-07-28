@@ -1,6 +1,6 @@
 ﻿namespace LastFrontierApi.Models.Metadata
 {
-    public class Occupation : Metadata
-    {
-    }
+  public class Occupation : Metadata
+  {
+  }
 }

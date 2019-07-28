@@ -2,9 +2,9 @@
 
 namespace LastFrontierApi.Services
 {
-    public interface IEventService
-    {
-        void AddCharacterToEvent(int characterId, int eventId);
-        Event GetActiveEvent();
-    }
+  public interface IEventService
+  {
+    void AddCharacterToEvent(int characterId, int eventId);
+    Event GetActiveEvent();
+  }
 }

@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using LastFrontierApi.Extensions;
 using LastFrontierApi.Models;
-using LastFrontierApi.Models.Validations;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
@@ -27,43 +23,63 @@ namespace LastFrontierApi.Controllers
     {
       try
       {
-        var symbols = new List<char>()
+        var symbols = new List<char>
         {
-          '!', '@', '#', '$', '%', '^', '&',
-          '*', '(', ')', '-', '_', '+', '=',
-          '{', '}', '[', ']', '\\', '|', ':',
-          ';', '"', '\'', '<', '>', ',', '.',
-          '?', '/', '~', '`'
+          '!',
+          '@',
+          '#',
+          '$',
+          '%',
+          '^',
+          '&',
+          '*',
+          '(',
+          ')',
+          '-',
+          '_',
+          '+',
+          '=',
+          '{',
+          '}',
+          '[',
+          ']',
+          '\\',
+          '|',
+          ':',
+          ';',
+          '"',
+          '\'',
+          '<',
+          '>',
+          ',',
+          '.',
+          '?',
+          '/',
+          '~',
+          '`'
         };
 
         var code = submission["code"].ToString();
         var wordSelected = code;
         foreach (var n in code)
-        {
-          if (symbols.Contains(n)) wordSelected = wordSelected.Replace($"{n}", "");
-        }
+          if (symbols.Contains(n))
+            wordSelected = wordSelected.Replace($"{n}", "");
 
         var hackingPuzzle = _context.tblHackingPuzzle.Include(hp => hp.Rows).FirstOrDefault();
 
-        if (hackingPuzzle == null)
-        {
-          throw new Exception("HackingPuzzle cannot be null!");
-        }
+        if (hackingPuzzle == null) throw new Exception("HackingPuzzle cannot be null!");
 
         if (hackingPuzzle.AttemptsRemaining <= 0)
         {
           var outOfAttempts = new JObject
           {
-            { "OutOfAttempts", true }
+            {"OutOfAttempts", true}
           };
         }
 
         var answerRow = hackingPuzzle.Rows.FirstOrDefault(r => r.IsAnswer);
 
-        if (answerRow == null)
-        {
-          throw new Exception("There is no answer! Well this puzzle sucks...");
-        }
+        if (answerRow == null) throw new Exception("There is no answer! Well this puzzle sucks...");
 
         var answer = answerRow.Word;
 
@@ -71,7 +87,7 @@ namespace LastFrontierApi.Controllers
         {
           var solution = new JObject
           {
-            { "Flag", hackingPuzzle.Flag }
+            {"Flag", hackingPuzzle.Flag}
           };
 
           hackingPuzzle.AttemptsRemaining = hackingPuzzle.Attempts;
@@ -84,7 +100,7 @@ namespace LastFrontierApi.Controllers
         {
           var outOfAttempts = new JObject
           {
-            { "OutOfAttempts", true }
+            {"OutOfAttempts", true}
           };
 
           hackingPuzzle.AttemptsRemaining--;
@@ -95,18 +111,14 @@ namespace LastFrontierApi.Controllers
         }
 
         var numberCorrect = 0;
-        for (int i = 0; i < answer.Length; i++)
-        {
+        for (var i = 0; i < answer.Length; i++)
           if (answer[i] == wordSelected[i])
-          {
             numberCorrect++;
-          }
-        }
 
         var result = new JObject
         {
-          { "NumberCorrect", numberCorrect },
-          { "WordLength", answer.Length }
+          {"NumberCorrect", numberCorrect},
+          {"WordLength", answer.Length}
         };
 
         hackingPuzzle.AttemptsRemaining--;
@@ -128,18 +140,15 @@ namespace LastFrontierApi.Controllers
       {
         var hackingPuzzle = _context.tblHackingPuzzle.ToList().FirstOrDefault();
 
-        if (hackingPuzzle == null)
-        {
-          throw new Exception("HackingPuzzle cannot be null!");
-        }
+        if (hackingPuzzle == null) throw new Exception("HackingPuzzle cannot be null!");
 
         var attempts = hackingPuzzle.Attempts;
         var attemptsRemaining = hackingPuzzle.AttemptsRemaining;
 
         var attemptsObj = new JObject
         {
-          { "Attempts", attempts },
-          { "AttemptsRemaining", attemptsRemaining }
+          {"Attempts", attempts},
+          {"AttemptsRemaining", attemptsRemaining}
         };
 
         return Ok(attemptsObj);

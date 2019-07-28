@@ -1,16 +1,15 @@
-﻿using System.Globalization;
-using LastFrontierApi.Models.Metadata;
+﻿using LastFrontierApi.Models.Metadata;
 
 namespace LastFrontierApi.Models
 {
-    public class CharacterMetadata
-    {
-        public Occupation[] Occupations { get; set; }
-        public SideGig[] SideGigs { get; set; }
-        public Skill[] Skills { get; set; }
-        public Species[] Species { get; set; }
-        public Status[] Statuses { get; set; }
-        public StressResponse[] StressResponses { get; set; }
-        public Culture[] Cultures { get; set; }
-    }
+  public class CharacterMetadata
+  {
+    public Occupation[] Occupations { get; set; }
+    public SideGig[] SideGigs { get; set; }
+    public Skill[] Skills { get; set; }
+    public Species[] Species { get; set; }
+    public Status[] Statuses { get; set; }
+    public StressResponse[] StressResponses { get; set; }
+    public Culture[] Cultures { get; set; }
+  }
 }

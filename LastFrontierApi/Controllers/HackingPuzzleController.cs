@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LastFrontierApi.Extensions;
 using LastFrontierApi.Models;
 using LastFrontierApi.Models.Validations;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -64,10 +59,7 @@ namespace LastFrontierApi.Controllers
       {
         var hackingPuzzle = _context.tblHackingPuzzle.Include(hp => hp.Rows).FirstOrDefault();
 
-        if (hackingPuzzle == null)
-        {
-          throw new Exception("HackingPuzzle cannot be null!");
-        }
+        if (hackingPuzzle == null) throw new Exception("HackingPuzzle cannot be null!");
 
         hackingPuzzle.AttemptsRemaining = hackingPuzzle.Attempts;
 

@@ -7,7 +7,7 @@ namespace LastFrontierApi.Models
   public class HackingPuzzleRow
   {
     public int Id { get; set; }
-    public string Word { get; set;  }
+    public string Word { get; set; }
     public bool IsAnswer { get; set; }
     public int HackingPuzzleId { get; set; }
   }
