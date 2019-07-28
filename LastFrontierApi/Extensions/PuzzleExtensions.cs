@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace LastFrontierApi.Extensions
 {
@@ -25,10 +23,9 @@ namespace LastFrontierApi.Extensions
     {
       [ThreadStatic] private static Random _local;
 
-      public static Random ThisThreadsRandom
-      {
-        get { return _local ?? (_local = new Random(unchecked(Environment.TickCount * 31 + Thread.CurrentThread.ManagedThreadId))); }
-      }
+      public static Random ThisThreadsRandom => _local ?? (_local =
+                                                  new Random(unchecked(Environment.TickCount * 31 +
+                                                                       Thread.CurrentThread.ManagedThreadId)));
     }
   }
 }

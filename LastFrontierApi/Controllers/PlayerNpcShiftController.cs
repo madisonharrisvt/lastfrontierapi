@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using LastFrontierApi.Extensions;
 using LastFrontierApi.Models;
 using LastFrontierApi.Services;
 using Microsoft.AspNetCore.Authorization;

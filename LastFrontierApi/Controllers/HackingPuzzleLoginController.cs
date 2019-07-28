@@ -4,11 +4,8 @@ using System.Linq;
 using System.Text;
 using LastFrontierApi.Extensions;
 using LastFrontierApi.Models;
-using LastFrontierApi.Models.Validations;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
 
 namespace LastFrontierApi.Controllers
 {
@@ -35,16 +32,43 @@ namespace LastFrontierApi.Controllers
 
         var hackingPuzzle = _context.tblHackingPuzzle.Include(hp => hp.Rows).FirstOrDefault();
 
-        var symbols = new List<char>()
+        var symbols = new List<char>
         {
-          '!', '@', '#', '$', '%', '^', '&',
-          '*', '(', ')', '-', '_', '+', '=',
-          '{', '}', '[', ']', '\\', '|', ':',
-          ';', '"', '\'', '<', '>', ',', '.',
-          '?', '/', '~', '`'
+          '!',
+          '@',
+          '#',
+          '$',
+          '%',
+          '^',
+          '&',
+          '*',
+          '(',
+          ')',
+          '-',
+          '_',
+          '+',
+          '=',
+          '{',
+          '}',
+          '[',
+          ']',
+          '\\',
+          '|',
+          ':',
+          ';',
+          '"',
+          '\'',
+          '<',
+          '>',
+          ',',
+          '.',
+          '?',
+          '/',
+          '~',
+          '`'
         };
 
-        if (!hackingPuzzle.Rows.Any()) { throw new Exception("Hacking Puzzle has no rows!"); }
+        if (!hackingPuzzle.Rows.Any()) throw new Exception("Hacking Puzzle has no rows!");
 
         var rows = hackingPuzzle.Rows.Select(r => r.Word).ToList();
 
@@ -64,14 +88,11 @@ namespace LastFrontierApi.Controllers
             var randomChar = symbols[randomIndex];
 
             if (j < codeStart)
-            {
               encryptedCode.Insert(j, randomChar);
-            }
             else if (j >= codeStart + codeLength)
-            {
               encryptedCode.Append(randomChar);
-            }
           }
+
           puzzleCodes.Add(code, encryptedCode.ToString());
         }
 

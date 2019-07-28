@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace LastFrontierApi.Extensions
 {
@@ -9,10 +6,7 @@ namespace LastFrontierApi.Extensions
   {
     public static T ThrowIfNull<T>(this T item, string name)
     {
-      if (item == null)
-      {
-        throw new Exception($"'{name}' cannot be null!");
-      }
+      if (item == null) throw new Exception($"'{name}' cannot be null!");
 
       return item;
     }

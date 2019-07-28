@@ -1,6 +1,6 @@
 ﻿namespace LastFrontierApi.Models.Metadata
 {
-    public class StressResponse : Metadata
-    {
-    }
+  public class StressResponse : Metadata
+  {
+  }
 }
